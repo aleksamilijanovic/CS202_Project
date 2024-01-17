@@ -10,7 +10,10 @@ module org.example.musicplayer {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires com.google.gson;
 
     opens org.example.musicplayer to javafx.fxml;
     exports org.example.musicplayer;
+    exports org.example.musicplayer.song_searching;
+    opens org.example.musicplayer.song_searching to javafx.fxml;
 }

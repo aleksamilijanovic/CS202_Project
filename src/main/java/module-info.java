@@ -11,6 +11,7 @@ module org.example.musicplayer {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
     requires com.google.gson;
+    requires jaudiotagger;
 
     opens org.example.musicplayer to javafx.fxml;
     exports org.example.musicplayer;

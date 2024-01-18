@@ -4,6 +4,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.Tag;
+
 public class LocalMp3Handler {
 
     public static final String MP3_PATH = "src/main/java/org/example/musicplayer/library/";
@@ -18,10 +23,23 @@ public class LocalMp3Handler {
                 for(File file : files) {
                     if(file.isFile() && file.getName().endsWith(".mp3")) {
                         mp3FileNames.add(file.getName());
+                        extractArtistName(file);
                     }
                 }
             }
         }
         return  mp3FileNames;
+    }
+
+
+    public String extractArtistName(File mp3File) {
+        try{
+            AudioFile audioFile = AudioFileIO.read(mp3File);
+            Tag tag = audioFile.getTag();
+            return tag.getFirst(FieldKey.ARTIST);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

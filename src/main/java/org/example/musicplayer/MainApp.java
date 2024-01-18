@@ -1,13 +1,14 @@
 package org.example.musicplayer;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.example.musicplayer.song_searching.LocalMp3Handler;
 import org.example.musicplayer.song_searching.SpotifyApiHandler;
 
+import java.io.File;
 import java.util.List;
 
 
@@ -40,8 +41,9 @@ public class MainApp extends Application {
 
             if(!mp3FileNames.isEmpty()){
                 for(String mp3FileName : mp3FileNames){
+                    String artistName = localMp3Handler.extractArtistName(new File(LocalMp3Handler.MP3_PATH + mp3FileName));
                     SpotifyApiHandler spotifyApiHandler = new SpotifyApiHandler(accessToken);
-                    spotifyApiHandler.getTrackInfo(mp3FileName);
+                    spotifyApiHandler.getTrackInfo(accessToken,"Vermilion", "Slipknot");
                     System.out.println("Playing " + mp3FileName);
                 }
             } else {

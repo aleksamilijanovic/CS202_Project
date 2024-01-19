@@ -12,6 +12,8 @@ module org.example.musicplayer {
     requires com.almasb.fxgl.all;
     requires com.google.gson;
     requires jaudiotagger;
+    requires java.logging;
+    requires javafx.media;
 
     opens org.example.musicplayer to javafx.fxml;
     exports org.example.musicplayer;

@@ -65,8 +65,12 @@ public class SpotifyApiHandler {
     public void getTrackInfo(String accessToken, String songName, String artistName) {
         try {
 
+            String trackName = removeMp3Extension(songName);
+            String formattedTrackName = removeSpaces(trackName);
+            String formattedArtistName = removeSpaces(artistName);
+
             String endpoint = "https://api.spotify.com/v1/search";
-            String query = "q=" + songName + "%20" + artistName + "&type=track&limit=1";
+            String query = "q=" + formattedTrackName + "%20" + formattedArtistName + "&type=track&limit=1";
             String url = endpoint + "?" + query;
 
             System.out.println("URL: " + url);
@@ -118,5 +122,18 @@ public class SpotifyApiHandler {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private String removeMp3Extension(String songName) {
+        if (songName.endsWith(".mp3")) {
+            return songName.substring(0, songName.length() - 4);
+        }
+        else {
+            return songName;
+        }
+    }
+
+    private String removeSpaces(String input) {
+        return input.replaceAll(" ", "%20");
     }
 }

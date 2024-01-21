@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -18,6 +16,15 @@ public class SpotifyApiHandler {
     private static final String CLIENT_SECRET = "65fa32ed7e2f4527ae20a6126a142746"; // Your Spotify API client secret
 
     private final String accessToken;
+
+    private String foundSongName;
+    private String foundArtistName;
+    private String albumName;
+    private String albumCoverUrl;
+
+    private JsonArray items;
+
+    private JsonObject firstTrack;
 
     public SpotifyApiHandler(String accessToken) {
         this.accessToken = accessToken;
@@ -102,7 +109,7 @@ public class SpotifyApiHandler {
                     String foundSongName = firstTrack.get("name").getAsString();
                     String foundArtistName = firstTrack.getAsJsonArray("artists").get(0).getAsJsonObject().get("name").getAsString();
                     String albumName = firstTrack.getAsJsonObject("album").get("name").getAsString();
-                    String albumCoverUrl = firstTrack.getAsJsonObject("album").getAsJsonArray("images").get(0).getAsJsonObject().get("url").getAsString();
+                    albumCoverUrl = firstTrack.getAsJsonObject("album").getAsJsonArray("images").get(0).getAsJsonObject().get("url").getAsString();
                     int durationMs = firstTrack.get("duration_ms").getAsInt();
 
                     // Example: Display the information in the console
@@ -133,7 +140,37 @@ public class SpotifyApiHandler {
         }
     }
 
+
+
+
+
     private String removeSpaces(String input) {
         return input.replaceAll(" ", "%20");
     }
+
+    public String getFoundSongName() {
+        return foundSongName;
+    }
+
+    public String getFoundArtistName() {
+        return foundArtistName;
+    }
+
+    public String getAlbumName() {
+        return albumName;
+    }
+
+    public String getAlbumCoverUrl() {
+        System.out.println("Obtained album cover url: " + albumCoverUrl);
+        return albumCoverUrl;
+    }
+
+    public JsonArray getItems() {
+        return items;
+    }
+
+    public JsonObject getFirstTrack() {
+        return firstTrack;
+    }
+
 }

@@ -15,6 +15,10 @@ module org.example.musicplayer {
     requires java.logging;
     requires javafx.media;
     requires java.sql;
+    requires org.mockito;
+    requires javafx.swing;
+    requires org.junit.jupiter.api;
+    requires org.junit.platform.commons;
 
     opens org.example.musicplayer to javafx.fxml;
     exports org.example.musicplayer;

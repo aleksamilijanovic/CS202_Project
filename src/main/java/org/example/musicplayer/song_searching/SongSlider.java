@@ -2,14 +2,11 @@ package org.example.musicplayer.song_searching;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
 import javafx.scene.control.Slider;
-import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
-import java.security.Key;
-import java.sql.Time;
+
 
 public class SongSlider extends Slider {
 
@@ -21,6 +18,8 @@ public class SongSlider extends Slider {
 
     public SongSlider(MediaPlayer mediaPlayer) {
         this.mediaPlayer = mediaPlayer;
+        System.out.println(this.mediaPlayer);
+        System.out.println(mediaPlayer);
         sliderUpdateTimeline = new Timeline(new KeyFrame(SLIDER_UPDATE_INTERVAL, event -> updateSlider()));
         initializeSlider();
     }
@@ -57,7 +56,10 @@ public class SongSlider extends Slider {
 
 
 
-    private void updateSlider() {
+    public void updateSlider() {
+        System.out.println("Media player: " + mediaPlayer);
+        System.out.println("Media status: " + mediaPlayer.getStatus());
+        System.out.println("Timeline status: " + sliderUpdateTimeline.getStatus());
         if (mediaPlayer != null && mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
             Duration totalDuration = mediaPlayer.getMedia().getDuration();
             Duration currentDuration = mediaPlayer.getCurrentTime();

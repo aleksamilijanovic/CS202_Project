@@ -5,10 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.Duration;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 
 public class SpotifyApiHandler {
 
@@ -55,9 +54,6 @@ public class SpotifyApiHandler {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String response = reader.readLine();
                 reader.close();
-                // Parse the JSON response to get the access token
-                // Example: {"access_token":"yourAccessToken","token_type":"Bearer","expires_in":3600}
-                // Extract "yourAccessToken" from the JSON response
                 return response.split("\"")[3];
             } else {
                 System.out.println("HTTP request failed with response code: " + responseCode);
@@ -97,9 +93,16 @@ public class SpotifyApiHandler {
                     response.append(line);
                 }
 
-                // Parse the JSON response to get the track information
+                System.out.println("Complete JSON response: " + response);
+
+
                 JsonParser parser = new JsonParser();
                 JsonObject jsonResponse = parser.parse(response.toString()).getAsJsonObject();
+                System.out.println("Track Info JSON: " + jsonResponse);
+
+                // Parse the JSON response to get the track information
+
+                //JsonObject jsonResponse = parser.parse(response.toString()).getAsJsonObject();
                 JsonObject tracks = jsonResponse.getAsJsonObject("tracks");
                 JsonArray items = tracks.getAsJsonArray("items");
 
@@ -152,17 +155,47 @@ public class SpotifyApiHandler {
         return foundSongName;
     }
 
-    public String getFoundArtistName() {
-        return foundArtistName;
+    public String getFoundArtistName(String songName) {
+        if (this.items != null && !this.items.isJsonNull() && !this.items.isEmpty()) {
+            for (JsonElement track : this.items) {
+                JsonObject trackObj = track.getAsJsonObject();
+                if (trackObj.get("name").getAsString().equals(songName)) {
+                    return trackObj.getAsJsonArray("artists").get(0).getAsJsonObject().get("name").getAsString();
+                }
+            }
+        }
+        return null;
     }
 
-    public String getAlbumName() {
-        return albumName;
+
+
+    public String getAlbumName(String songName) {
+        if (this.items != null && !this.items.isJsonNull() && !this.items.isEmpty()) {
+            for (JsonElement track : this.items) {
+                JsonObject trackObj = track.getAsJsonObject();
+                if (trackObj.get("name").getAsString().equals(songName)) {
+                    return trackObj.getAsJsonObject("album").get("name").getAsString();
+                }
+            }
+        }
+        return null;
     }
 
     public String getAlbumCoverUrl() {
         System.out.println("Obtained album cover url: " + albumCoverUrl);
         return albumCoverUrl;
+    }
+
+    public Duration getDuration(String songName) {
+        if (this.items != null && !this.items.isJsonNull() && !this.items.isEmpty()) {
+            for (JsonElement track : this.items) {
+                JsonObject trackObj = track.getAsJsonObject();
+                if (trackObj.get("name").getAsString().equals(songName)) {
+                    return Duration.ofMillis(trackObj.get("duration_ms").getAsLong());
+                }
+            }
+        }
+        return Duration.ZERO;
     }
 
     public JsonArray getItems() {
